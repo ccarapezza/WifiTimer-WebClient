@@ -61,12 +61,19 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('editEvent-tailwindModal').classList.add('hidden');
         renderClock();
     });
+    updateStatus();
     setInterval(renderClock, 1000);
 });
 
 function renderClock(){
     const now = new Date();
-    document.getElementById("clock").innerHTML = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0') + ":" + now.getSeconds().toString().padStart(2, '0');
+    document.getElementById("clock").innerHTML = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0'); //+ ":" + now.getSeconds().toString().padStart(2, '0');
+    document.getElementById("clock-sec").innerHTML = now.getSeconds().toString().padStart(2, '0');
+    setTimeout(colonBlink, 500);
+}
+
+function colonBlink(){
+    document.getElementById("clock").innerHTML = document.getElementById("clock").innerHTML.replace(":", " ");
 }
 
 function loadEvents(){
@@ -216,8 +223,8 @@ function clickMenuMobileButton(){
 
 function clickAddButton(){
     document.getElementById('event-modal-title').innerHTML = 'New event';
-    document.getElementById('editEvent-hours').value = 00;
-    document.getElementById('editEvent-minutes').value = 00;
+    document.getElementById('editEvent-hours').value = "00";
+    document.getElementById('editEvent-minutes').value = "00";
 
     let eventDiv = document.getElementById('selected-event-icon');
     let eventDiv2 = document.getElementById('selected-event-label');
@@ -255,4 +262,47 @@ function selectEvent(event){
 
     document.getElementById('editEvent-eventSelector-value').value = event;
     document.getElementById('select-event-options').classList.add('hidden');
+}
+
+const GetStatus = async () => {
+    const response = await fetch('http://192.168.0.228/api/status');
+    const data = await response.text();
+    return data;
+}
+
+const SetStatus = async (status) => {
+    if(status === 0){
+        await fetch('http://192.168.0.228/api/off').then(response => updateStatus());
+    } else if(status === 1){
+        await fetch('http://192.168.0.228/api/on').then(response => updateStatus());
+    }
+}
+
+const clickToggleButton = async () => {
+    const status = await GetStatus();
+    if(status === "OFF"){
+        await SetStatus(1);
+    } else if(status === 1){
+        await SetStatus(0);
+    }
+}
+
+const updateStatus = async () => {
+    const status = await GetStatus();
+    const onDiv = document.getElementById('currentState-on');
+    const offDiv = document.getElementById('currentState-off');
+    const switchOn = document.getElementById('switch-on');
+    const switchOff = document.getElementById('switch-off');
+    
+    if(status === "OFF"){
+        onDiv.classList.add('hidden');
+        offDiv.classList.remove('hidden');
+        switchOn.classList.remove('hidden');
+        switchOff.classList.add('hidden');
+    } else if(status === "ON"){
+        onDiv.classList.remove('hidden');
+        offDiv.classList.add('hidden');
+        switchOn.classList.add('hidden');
+        switchOff.classList.remove('hidden');
+    }
 }

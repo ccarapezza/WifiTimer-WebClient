@@ -276,16 +276,29 @@
         <div class="mx-auto max-w-7xl py-2">
             <!-- Your content -->
             <div class="absolute left-1/2 my-5 flex w-screen max-w-max -translate-x-1/2 px-4 flex-col">
-                <div class="flex justify-center rounded-md border border-gray-200 p-2 mb-2">
-                    <div class="border rounded-md border-gray-700">
-                        <div
-                            class="border-b bg-gray-200 rounded-t-md px-2 font-bold text-center text-sm whitespace-nowrap">
-                            Current Time
+                <div class="flex flex-col gap-4 justify-center rounded-md border border-gray-200 p-2 mb-2">
+                    <div class="clock-background w-full">
+                        <div class="flex gap-2 p-2 justify-end">
+                            <div class="rounded-full disable-clock-background px-2 py-1 text-sm font-bold shadow-sm text-clock">AUTO</div>
+                            <div class="rounded-full bg-black px-2 py-1 text-sm font-bold shadow-sm text-clock">MANUAL</div>
                         </div>
-                        <div class="flex align-center p-2 justify-center items-center">
-                            <div id="clock" class="w-full text-center">Loading...</div>
+                        <div class="flex align-center p-2 justify-center items-center clock-wrapper w-full">
+                            <div class="w-full text-center D7MBI clock-time"><span id="clock" class="text-6xl w-full">!! !!</span><span id="clock-sec" class="ml-1 text-2xl">!!</span></div>
+                            <div class="w-full text-center D7MBI clock-time-background"><span class="text-6xl">88:88</span><span class="ml-1 text-2xl">88</span></div>
                         </div>
                     </div>
+                    <button id="switch-on" type="button"
+                        onclick="SetStatus(0);"
+                        class="hidden rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500">
+                        ON
+                    </button>
+                    <button id="switch-off" type="button"
+                        onclick="SetStatus(1);"
+                        class="hidden rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500">
+                        OFF
+                    </button>
+                </div>
+                <div class="flex justify-center rounded-md border border-gray-200 p-2 mb-2">
                     <div class="border rounded-md border-gray-700 ml-2">
                         <div
                             class="border-b bg-gray-200 rounded-t-md px-2 font-bold text-center text-sm whitespace-nowrap">
@@ -295,7 +308,7 @@
                             <div class="bg-red-500 w-5 h-5 rounded-full d-flex">&nbsp;</div> <span
                                 class="text-red-500 font-bold pl-2">OFF</span>
                         </div>
-                        <div id="currentState-on" class="flex align-center p-2 justify-center items-center">
+                        <div id="currentState-on" class="flex hidden align-center p-2 justify-center items-center">
                             <div class="bg-green-500 w-5 h-5 rounded-full">&nbsp;</div> <span
                                 class="text-green-500 font-bold pl-2">ON</span>
                         </div>
